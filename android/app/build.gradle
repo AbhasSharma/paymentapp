@@ -1,0 +1,57 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
+    defaultConfig {
+        applicationId "com.etas.etas"
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    //noinspection GradleDependency
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/jtds-1.2.7.jar')
+    implementation files('libs/ksoap.jar')
+    implementation 'com.android.support:appcompat-v7:30.2'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.android.support:design:30.2'
+    implementation 'com.google.firebase:firebase-appindexing:20.0.0'
+    implementation 'com.android.support:support-v4:30.2'
+}
